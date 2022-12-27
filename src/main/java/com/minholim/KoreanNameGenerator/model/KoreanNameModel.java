@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import com.minholim.KoreanNameGenerator.service.ConnectMongoDB;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -12,6 +15,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+@Component
 public class KoreanNameModel {
 
     List<KoreanLastName> lastNameList = new ArrayList<KoreanLastName>();
@@ -20,30 +24,36 @@ public class KoreanNameModel {
 
     public KoreanNameModel() {
 
-        ConnectionString connectionString = new ConnectionString(
-                "mongodb+srv://slayer:skek1004@cluster0.mddilon.mongodb.net/?retryWrites=true&w=majority");
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString)
-                .build();
-        MongoClient mongoClient = MongoClients.create(settings);
-        MongoDatabase database = mongoClient.getDatabase("koreannames");
+        // // get mongodb.username
+        // String username = System.getProperty("mongodb.username");
+        // // get mongodb.password
+        // String password = System.getProperty("mongodb.password");
 
-        MongoCollection<Document> collection = database.getCollection("KoreanLastNames");
+        // // print username and pass
+        // System.out.println("username: " + username);
 
-        // get all documents insert into lastNameList
+        // ConnectionString connectionString = new ConnectionString(
+        // "mongodb+srv://slayer:skek1004@cluster0.mddilon.mongodb.net/?retryWrites=true&w=majority");
+        // MongoClientSettings settings = MongoClientSettings.builder()
+        // .applyConnectionString(connectionString)
+        // .build();
+        // MongoClient mongoClient = MongoClients.create(settings);
+        // MongoDatabase database = mongoClient.getDatabase("koreannames");
+
+        ConnectMongoDB connectMongoDB = new ConnectMongoDB();
+
+        MongoCollection<Document> collection = connectMongoDB.getCollection("KoreanLastNames");
+
+        // // get all documents insert into lastNameList
         for (Document myDoc : collection.find()) {
-            lastNameList.add(new KoreanLastName(myDoc.getString("LastName"), myDoc.getString("R_LastName")));
+            lastNameList.add(new KoreanLastName(myDoc.getString("LastName"),
+                    myDoc.getString("R_LastName")));
         }
 
-        MongoCollection<Document> firstNameCollection = database.getCollection("KoreanNames");
+        MongoCollection<Document> firstNameCollection = connectMongoDB.getCollection("KoreanNames");
 
-        // get all documents insert into firstNameList
-
+        // // get all documents insert into firstNameList
         for (Document myDoc : firstNameCollection.find()) {
-            // print them
-            // System.out.println(myDoc.getString("FirstName"));
-            // System.out.println(myDoc.getString("R_FirstName"));
-            // System.out.println(myDoc.getDouble("Masculine:Feminine"));
             firstNameList.add(new KoreanFirstName(myDoc.getString("FirstName"),
                     myDoc.getString("R_FirstName"), myDoc.getDouble("Masculine:Feminine")));
         }
@@ -82,6 +92,7 @@ public class KoreanNameModel {
                 + getRandomKoreanFirstName(FirstNamePopularity).getE_firstName();
     }
 
+    //
     public KoreanFullName getKoreanFullName(int LastNamePopularity, int FirstNamePopularity) {
         return new KoreanFullName(getRandomKoreanFirstName(FirstNamePopularity),
                 getRandomKoreanLastName(LastNamePopularity));

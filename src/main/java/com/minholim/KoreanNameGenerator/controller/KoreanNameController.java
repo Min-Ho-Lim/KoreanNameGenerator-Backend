@@ -21,6 +21,7 @@ public class KoreanNameController {
     public KoreanLastName getRandomKoreanLastName(
             @RequestParam(required = false, defaultValue = "30") int popularity) {
         return koreanNameModel.getRandomKoreanLastName(popularity);
+        //
     }
 
     @GetMapping("/getRandomKoreanFirstName")
