@@ -8,6 +8,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
 @Service
 public class ConnectMongoDB {
@@ -45,7 +46,7 @@ public class ConnectMongoDB {
         database = mongoClient.getDatabase(databaseName);
     }
 
-    public MongoCollection getCollection(String collectionName) {
+    public MongoCollection<Document> getCollection(String collectionName) {
         if (!isDatabaseConnected()) {
             connectMongoDB();
         }
