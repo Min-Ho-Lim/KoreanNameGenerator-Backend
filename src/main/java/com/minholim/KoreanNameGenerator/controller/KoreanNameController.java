@@ -16,14 +16,23 @@ public class KoreanNameController {
 
     private KoreanNameModel koreanNameModel = new KoreanNameModel();
 
-    @GetMapping("/getRandomKoreanName")
-    public KoreanLastName getRandomKoreanName() {
-        return koreanNameModel.getRandomKoreanLastName();
+    @GetMapping("/getRandomKoreanLastName")
+    public KoreanLastName getRandomKoreanLastName(
+            @RequestParam(required = false, defaultValue = "30") int popularity) {
+        return koreanNameModel.getRandomKoreanLastName(popularity);
     }
 
     @GetMapping("/getRandomKoreanFirstName")
-    public KoreanFirstName getRandomKoreanFirstName() {
-        return koreanNameModel.getRandomKoreanFirstName();
+    public KoreanFirstName getRandomKoreanFirstName(
+            @RequestParam(required = false, defaultValue = "1000") int popularity) {
+        return koreanNameModel.getRandomKoreanFirstName(popularity);
+    }
+
+    @GetMapping("/getRandomKoreanFullName")
+    public String getRandomKoreanFullName(
+            @RequestParam(name = "lastNamePopularity", required = false, defaultValue = "30") int lastNamePopularity,
+            @RequestParam(name = "firstNamePopularity", required = false, defaultValue = "1000") int firstNamePopularity) {
+        return koreanNameModel.getRandomKoreanName(lastNamePopularity, firstNamePopularity);
     }
 
 }

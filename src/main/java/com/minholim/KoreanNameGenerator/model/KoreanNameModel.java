@@ -55,12 +55,25 @@ public class KoreanNameModel {
     }
 
     // Get random KoreanLastName
-    public KoreanLastName getRandomKoreanLastName() {
-        return lastNameList.get((int) (Math.random() * lastNameList.size()));
+    public KoreanLastName getRandomKoreanLastName(int popularity) {
+        if (popularity >= 0 && popularity <= lastNameList.size()) {
+            return lastNameList.get((int) (Math.random() * popularity));
+        }
+        throw new IllegalArgumentException("popularity must be between 0 and " + lastNameList.size());
     }
 
     // Get random KoreanFirstName
-    public KoreanFirstName getRandomKoreanFirstName() {
-        return firstNameList.get((int) (Math.random() * firstNameList.size()));
+    public KoreanFirstName getRandomKoreanFirstName(int popularity) {
+        if (popularity >= 0 && popularity <= firstNameList.size()) {
+            return firstNameList.get((int) (Math.random() * popularity));
+        }
+        throw new IllegalArgumentException("popularity must be between 0 and " + firstNameList.size());
     }
+
+    // Create random full Korean Name
+    public String getRandomKoreanName(int LastNamePopularity, int FirstNamePopularity) {
+        return getRandomKoreanLastName(LastNamePopularity).getLastName() + " "
+                + getRandomKoreanFirstName(FirstNamePopularity).getK_firstName();
+    }
+
 }
