@@ -32,7 +32,7 @@ public class KoreanNameModel {
 
         // get all documents insert into lastNameList
         for (Document myDoc : collection.find()) {
-            lastNameList.add(new KoreanLastName(myDoc.getString("LastName")));
+            lastNameList.add(new KoreanLastName(myDoc.getString("LastName"), myDoc.getString("R_LastName")));
         }
 
         MongoCollection<Document> firstNameCollection = database.getCollection("KoreanNames");
@@ -72,8 +72,19 @@ public class KoreanNameModel {
 
     // Create random full Korean Name
     public String getRandomKoreanName(int LastNamePopularity, int FirstNamePopularity) {
-        return getRandomKoreanLastName(LastNamePopularity).getLastName() + " "
+        return getRandomKoreanLastName(LastNamePopularity).getK_LastName() + " "
                 + getRandomKoreanFirstName(FirstNamePopularity).getK_firstName();
+    }
+
+    // Create random full Korean Name
+    public String getRandomRomanizedKoreanName(int LastNamePopularity, int FirstNamePopularity) {
+        return getRandomKoreanLastName(LastNamePopularity).getE_LastName() + " "
+                + getRandomKoreanFirstName(FirstNamePopularity).getE_firstName();
+    }
+
+    public KoreanFullName getKoreanFullName(int LastNamePopularity, int FirstNamePopularity) {
+        return new KoreanFullName(getRandomKoreanFirstName(FirstNamePopularity),
+                getRandomKoreanLastName(LastNamePopularity));
     }
 
 }
