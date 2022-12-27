@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.minholim.KoreanNameGenerator.model.KoreanFirstName;
 import com.minholim.KoreanNameGenerator.model.KoreanLastName;
 import com.minholim.KoreanNameGenerator.model.KoreanNameModel;
 
@@ -18,6 +19,11 @@ public class KoreanNameController {
     @GetMapping("/getRandomKoreanName")
     public KoreanLastName getRandomKoreanName() {
         return koreanNameModel.getRandomKoreanLastName();
+    }
+
+    @GetMapping("/getRandomKoreanFirstName")
+    public KoreanFirstName getRandomKoreanFirstName() {
+        return koreanNameModel.getRandomKoreanFirstName();
     }
 
 }

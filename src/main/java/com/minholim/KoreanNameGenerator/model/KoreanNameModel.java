@@ -16,6 +16,8 @@ public class KoreanNameModel {
 
     List<KoreanLastName> lastNameList = new ArrayList<KoreanLastName>();
 
+    List<KoreanFirstName> firstNameList = new ArrayList<KoreanFirstName>();
+
     public KoreanNameModel() {
 
         ConnectionString connectionString = new ConnectionString(
@@ -32,6 +34,20 @@ public class KoreanNameModel {
         for (Document myDoc : collection.find()) {
             lastNameList.add(new KoreanLastName(myDoc.getString("LastName")));
         }
+
+        MongoCollection<Document> firstNameCollection = database.getCollection("KoreanNames");
+
+        // get all documents insert into firstNameList
+
+        for (Document myDoc : firstNameCollection.find()) {
+            // print them
+            // System.out.println(myDoc.getString("FirstName"));
+            // System.out.println(myDoc.getString("R_FirstName"));
+            // System.out.println(myDoc.getDouble("Masculine:Feminine"));
+            firstNameList.add(new KoreanFirstName(myDoc.getString("FirstName"),
+                    myDoc.getString("R_FirstName"), myDoc.getDouble("Masculine:Feminine")));
+        }
+
     }
 
     public List<KoreanLastName> getLastNameList() {
@@ -41,5 +57,10 @@ public class KoreanNameModel {
     // Get random KoreanLastName
     public KoreanLastName getRandomKoreanLastName() {
         return lastNameList.get((int) (Math.random() * lastNameList.size()));
+    }
+
+    // Get random KoreanFirstName
+    public KoreanFirstName getRandomKoreanFirstName() {
+        return firstNameList.get((int) (Math.random() * firstNameList.size()));
     }
 }
